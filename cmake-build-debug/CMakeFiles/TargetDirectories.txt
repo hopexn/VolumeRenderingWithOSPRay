@@ -1,0 +1,3 @@
+/Users/yanhaopeng/Desktop/CVLearning/OSPRayProject/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/yanhaopeng/Desktop/CVLearning/OSPRayProject/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yanhaopeng/Desktop/CVLearning/OSPRayProject/cmake-build-debug/CMakeFiles/OSPRayProject.dir

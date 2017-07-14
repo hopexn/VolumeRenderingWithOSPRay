@@ -1,0 +1,6 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/yanhaopeng/Desktop/CVLearning/OSPRayProject
+-- Found required OSPRay dependency: TBB in /usr/local/include
+-- Found Embree v2.16.4: /opt/local/lib/cmake/embree-2.16.4/../../../lib/libembree.dylib
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/yanhaopeng/Desktop/CVLearning/OSPRayProject/cmake-build-debug
