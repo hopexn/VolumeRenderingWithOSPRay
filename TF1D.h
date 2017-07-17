@@ -7,9 +7,6 @@
 
 //C libraries
 #include "ospray/ospray.h"
-#include <cstdio>
-#include <cstdlib>
-
 
 class TF1D {
 public:
@@ -22,7 +19,7 @@ public:
     OSPTransferFunction getTransferFunction();
 
 private:
-    static OSPTransferFunction tf;
+    OSPTransferFunction tf;
 
     int num;
     std::vector<osp::vec3f> colors;

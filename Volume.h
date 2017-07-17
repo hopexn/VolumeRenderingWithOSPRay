@@ -17,6 +17,10 @@ public:
 
     OSPVolume getVolume();
 
+    void setVoxelRange(const osp::vec2f &voxelRange);
+
+    void setSamplingRate(float samplingRate);
+
 private:
     OSPVolume volume = NULL;
     osp::vec3i dims;
@@ -27,8 +31,8 @@ private:
     osp::vec3f gridSpacing;
     osp::vec3f gridOrigin;
 
-    static TF1D tf1d;
-    float samplingRate = 0.125f;
+    TF1D tf1d;
+    float samplingRate;
 
     void loadRawFile(std::string filename);
 

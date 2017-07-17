@@ -28,6 +28,10 @@ void TF1D::loadFromFile(std::string filename) {
         fscanf(fp, "%f %f %f %f %f %f %f %f %f",
                &index, &color.x, &color.y, &color.z, &opacity,
                &color.x, &color.y, &color.z, &opacity);
+        color.x /= 255;
+        color.y /= 255;
+        color.z /= 255;
+        opacity /= 255;
         colors.push_back(color);
         opacities.push_back(opacity);
         indexs.push_back(index);
@@ -102,14 +106,16 @@ void TF1D::setup() {
         opacities_tmp.push_back(opacity);
     }
 
-    OSPData colors_data = ospNewData((size_t) item_num, OSP_FLOAT3, colors_tmp.data());
+    OSPData colors_data = ospNewData((size_t) item_num, OSP_FLOAT3, colors.data());
     ospCommit(colors_data);
-    OSPData opacities_data = ospNewData((size_t) item_num, OSP_FLOAT, opacities_tmp.data());
+    OSPData opacities_data = ospNewData((size_t) item_num, OSP_FLOAT, opacities.data());
     ospCommit(opacities_data);
 
     ospRelease(tf);
     tf = ospNewTransferFunction("piecewise_linear");
     ospSetData(tf, "colors", colors_data);
     ospSetData(tf, "opacities", opacities_data);
+    ospSetVec2f(tf, "valueRange", osp::vec2f{0, 255});
+    ospSetf(tf, "adaptiveSampling", 0);
     ospCommit(tf);
 }

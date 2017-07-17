@@ -1,6 +1,9 @@
 #include "Volume.h"
+
 MyVolume::MyVolume() {
     volume = ospNewVolume("shared_structured_volume");
+    samplingRate = 0.125f;
+    gridOrigin = {-0.5f, -0.5f, 0};
 }
 
 MyVolume::~MyVolume() {
@@ -21,6 +24,8 @@ void MyVolume::loadFromVifoFile(std::string filename) {
     fscanf(fp, "%s", dataFile);
 
     fclose(fp);
+
+    gridSpacing = {1.0f / dims.x, 1.0f / dims.y, 1.0f / dims.z};
 
     std::string filePath(filename);
     filePath = filePath.substr(0, filePath.rfind('/') + 1);
@@ -67,4 +72,12 @@ void MyVolume::setup() {
     ospSet1f(volume, "samplingRate", samplingRate);
     ospSetObject(volume, "transferFunction", tf1d.getTransferFunction());
     ospCommit(volume);
+}
+
+void MyVolume::setVoxelRange(const osp::vec2f &voxelRange) {
+    MyVolume::voxelRange = voxelRange;
+}
+
+void MyVolume::setSamplingRate(float samplingRate) {
+    MyVolume::samplingRate = samplingRate;
 }

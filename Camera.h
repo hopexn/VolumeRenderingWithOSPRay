@@ -19,6 +19,7 @@ public:
 
     OSPCamera getCamera();
 
+    void setup();
 private:
     OSPCamera camera = NULL;
 
@@ -28,7 +29,7 @@ private:
     //近端截取
     float nearClipping;
 
-    void setup();
+
 };
 
 #endif //CAMERA_HPP
