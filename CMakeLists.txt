@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_COMPILER "/usr/local/bin/gcc-7")
 set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-7")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -Wall")
 
 #添加OSPRay依赖
 find_package(OSPRay REQUIRED)
@@ -28,7 +28,7 @@ include_directories(${QT_QTOPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 find_package(OpenCV REQUIRED)
 
 #项目源代码
-set(SOURCE_FILES Camera.hpp)
+set(SOURCE_FILES Camera.hpp TF1D.hpp Volume.hpp common.h)
 
 #可执行文件
 add_executable(OSPRayProject ${SOURCE_FILES})
