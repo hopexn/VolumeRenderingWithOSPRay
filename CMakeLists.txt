@@ -28,7 +28,7 @@ include_directories(${QT_QTOPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 find_package(OpenCV REQUIRED)
 
 #项目源代码
-set(SOURCE_FILES Camera.hpp TF1D.hpp Volume.hpp common.h)
+set(SOURCE_FILES main.cpp Camera.cpp TF1D.cpp Volume.cpp common.h Camera.cpp)
 
 #可执行文件
 add_executable(OSPRayProject ${SOURCE_FILES})
