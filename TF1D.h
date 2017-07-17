@@ -1,5 +1,5 @@
-#ifndef TF1D_HPP
-#define TF1D_HPP
+#ifndef TF1D_H
+#define TF1D_H
 //C++ libraries
 #include <iostream>
 #include <string>
@@ -31,7 +31,6 @@ private:
     osp::vec2f valueRange;
 
     void setup();
-
 };
 
 #endif

@@ -3,7 +3,7 @@ MyVolume::MyVolume() {
     volume = ospNewVolume("shared_structured_volume");
 }
 
-~MyVolume::MyVolume() {
+MyVolume::~MyVolume() {
     ospRelease(volume);
 }
 

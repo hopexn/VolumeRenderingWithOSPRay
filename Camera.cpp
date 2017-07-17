@@ -13,7 +13,7 @@ MyCamera::MyCamera() {
     this->setup();
 }
 
-~MyCamera::MyCamera() {
+MyCamera::~MyCamera() {
     ospRelease(camera);
 }
 
