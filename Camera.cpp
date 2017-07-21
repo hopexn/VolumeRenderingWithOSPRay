@@ -1,11 +1,10 @@
 #include "Camera.h"
+#include "common.h"
 
 MyCamera::MyCamera() {
-    pos = {0, 0, 5};
-    dir = {0, 0, -1};
-    up = {0, 1, 0};
-
-    nearClipping = 100;
+    pos = {CAMERA_POSITION_X_INIT, CAMERA_POSITION_Y_INIT, CAMERA_POSITION_Z_INIT};
+    dir = {CAMERA_DIRECTION_X_INIT, CAMERA_DIRECTION_Y_INIT, CAMERA_DIRECTION_Z_INIT};
+    up = {CAMERA_UP_X_INIT, CAMERA_UP_Y_INIT, CAMERA_UP_Z_INIT};
 
     //透视模式
     camera = ospNewCamera("perspective");
@@ -42,7 +41,6 @@ void MyCamera::setup() {
     ospSetVec3f(camera, "pos", pos);
     ospSetVec3f(camera, "dir", dir);
     ospSetVec3f(camera, "up", up);
-    ospSet1f(camera, "nearClipping", nearClipping);  //todo
     ospCommit(camera);
 }
 

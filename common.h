@@ -1,6 +1,24 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define MAC
+
+#define APPLE
+#define MAX_BUFFER_SIZE 256
+
+//相机位置
+#define CAMERA_POSITION_X_INIT 0.0f
+#define CAMERA_POSITION_Y_INIT 0.0f
+#define CAMERA_POSITION_Z_INIT 5.0f
+
+//相机朝向
+#define CAMERA_DIRECTION_X_INIT 0.0f
+#define CAMERA_DIRECTION_Y_INIT 0.0f
+#define CAMERA_DIRECTION_Z_INIT -1.0f
+#define CAMERA_UP_X_INIT 0.0f
+#define CAMERA_UP_Y_INIT 1.0f
+#define CAMERA_UP_Z_INIT 0.0f
+
+//Volume采样率，默认100%
+#define VOLUME_SAMPLINGRATE_INIT 100.0f
 
 #endif //COMMON_H

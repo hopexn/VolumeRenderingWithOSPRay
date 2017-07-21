@@ -18,7 +18,6 @@ int main(int argc, const char **argv) {
     time_t start, end;
 
     MyVolume volume;
-    volume.setSamplingRate(100);
     volume.loadFromVifoFile(string("assets/volume/engine.vifo"));
 
     OSPModel world = ospNewModel();

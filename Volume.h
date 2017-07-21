@@ -15,19 +15,15 @@ public:
 
     void loadFromVifoFile(std::string filename);
 
-    OSPVolume getVolume();
-
-    void setVoxelRange(const osp::vec2f &voxelRange);
-
-    void setSamplingRate(float samplingRate);
-
+    osp::Volume *getVolume();
 private:
     OSPVolume volume = NULL;
+
+private:
     osp::vec3i dims;
     osp::vec3i space;
     unsigned char *buf;
 
-    osp::vec2f voxelRange;
     osp::vec3f gridSpacing;
     osp::vec3f gridOrigin;
 
