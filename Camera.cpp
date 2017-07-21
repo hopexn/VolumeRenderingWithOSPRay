@@ -42,7 +42,7 @@ void MyCamera::setup() {
     ospSetVec3f(camera, "pos", pos);
     ospSetVec3f(camera, "dir", dir);
     ospSetVec3f(camera, "up", up);
-    //ospSet1f(camera, "nearClipping", nearClipping);  todo
+    ospSet1f(camera, "nearClipping", nearClipping);  //todo
     ospCommit(camera);
 }
 

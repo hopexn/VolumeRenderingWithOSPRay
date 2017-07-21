@@ -32,6 +32,7 @@ private:
     osp::vec3f gridOrigin;
 
     TF1D tf1d;
+
     float samplingRate;
 
     void loadRawFile(std::string filename);

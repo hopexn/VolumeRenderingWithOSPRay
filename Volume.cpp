@@ -2,7 +2,6 @@
 
 MyVolume::MyVolume() {
     volume = ospNewVolume("shared_structured_volume");
-    samplingRate = 0.125f;
     gridOrigin = {-0.5f, -0.5f, 0};
 }
 
@@ -60,16 +59,11 @@ void MyVolume::loadRawFile(std::string filename) {
 void MyVolume::setup() {
     ospSetString(volume, "voxelType", "uchar");
     ospSetVec3i(volume, "dimensions", dims);
-
-    size_t size = (size_t) dims.x * dims.y * dims.z;
-    OSPData data = ospNewData(size, OSP_UCHAR, buf);
-    ospCommit(data);
-
+    ospSetRegion(volume, buf, osp::vec3i{0, 0, 0}, dims);
     ospSetVec3f(volume, "gridOrigin", gridOrigin);
     ospSetVec3f(volume, "gridSpacing", gridSpacing);
-    ospSetVec2f(volume, "voxelRange", voxelRange);
-    ospSetData(volume, "voxelData", data);
-    ospSet1f(volume, "samplingRate", samplingRate);
+    ospSetVec2f(volume, "voxelRange", osp::vec2f{0.0, 255.0f});
+    ospSet1f(volume, "samplingRate", 100.0f);
     ospSetObject(volume, "transferFunction", tf1d.getTransferFunction());
     ospCommit(volume);
 }

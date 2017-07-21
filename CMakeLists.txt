@@ -25,7 +25,9 @@ add_definitions(${QT_DEFINITIONS})
 #include_directories(${QT_QTOPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
 #项目源代码
-set(SOURCE_FILES main.cpp TF1D.cpp Volume.cpp Camera.cpp)
+set(HEAD_FILES RenderWidget.h Camera.h TF1D.h Volume.h)
+
+set(SOURCE_FILES main.cpp TF1D.cpp Volume.cpp Camera.cpp RenderWidget.cpp MainWIndow.cpp MainWIndow.h)
 
 add_executable(OSPRayProject ${SOURCE_FILES})
 

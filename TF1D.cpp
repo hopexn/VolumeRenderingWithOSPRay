@@ -106,9 +106,9 @@ void TF1D::setup() {
         opacities_tmp.push_back(opacity);
     }
 
-    OSPData colors_data = ospNewData((size_t) item_num, OSP_FLOAT3, colors.data());
+    OSPData colors_data = ospNewData((size_t) item_num, OSP_FLOAT3, colors_tmp.data());
     ospCommit(colors_data);
-    OSPData opacities_data = ospNewData((size_t) item_num, OSP_FLOAT, opacities.data());
+    OSPData opacities_data = ospNewData((size_t) item_num, OSP_FLOAT, opacities_tmp.data());
     ospCommit(opacities_data);
 
     ospRelease(tf);
@@ -116,6 +116,5 @@ void TF1D::setup() {
     ospSetData(tf, "colors", colors_data);
     ospSetData(tf, "opacities", opacities_data);
     ospSetVec2f(tf, "valueRange", osp::vec2f{0, 255});
-    ospSetf(tf, "adaptiveSampling", 0);
     ospCommit(tf);
 }
