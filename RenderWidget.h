@@ -80,6 +80,10 @@ protected:
             camera.rotate(dx, dy);
             repaint();
         } else if (event->buttons() & Qt::RightButton) {
+            if (dy > 0)
+                camera.scale(CAMERA_SCALE_RATE);
+            else
+                camera.scale(1/CAMERA_SCALE_RATE);
             repaint();
         }
         last_pos = event->pos();

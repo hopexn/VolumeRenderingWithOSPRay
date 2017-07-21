@@ -49,6 +49,8 @@ public:
     }
 
     void scale(float s) {
+        pos = center + (pos - center) * s;
+        setup();
     }
 
     osp::vec3f osp_vec(Vector3f vec) {

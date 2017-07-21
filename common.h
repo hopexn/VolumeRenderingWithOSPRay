@@ -18,6 +18,8 @@
 #define CAMERA_UP_Y_INIT 1.0f
 #define CAMERA_UP_Z_INIT 0.0f
 
+#define CAMERA_SCALE_RATE 0.88
+
 //Volume采样率，默认1.0
 #define VOLUME_SAMPLINGRATE_INIT 1.0f
 
