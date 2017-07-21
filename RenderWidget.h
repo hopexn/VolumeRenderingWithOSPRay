@@ -22,7 +22,7 @@ public:
         world = ospNewModel();
 
         filename = "assets/volume/engine.vifo";
-        volume.loadFromVifoFile(filename);
+        loadVolume(filename);
     }
 
     virtual ~RenderWidget() {
@@ -30,10 +30,9 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent *event) override {
-        time_t start, end;
-        QPainter painter(this);
-        QRect rect(0, 0, RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT);
+    void loadVolume(std::string filename) {
+        volume.loadFromVifoFile(filename);
+
         ospRelease(world);
         world = ospNewModel();
         ospAddVolume(world, volume.volume);
@@ -44,23 +43,29 @@ protected:
         ospSetObject(renderer, "camera", camera.camera);
         ospCommit(renderer);
 
-        osp::vec2i image_size = {RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT};
-        OSPFrameBuffer framebuffer = ospNewFrameBuffer(image_size, OSP_FB_SRGBA, OSP_FB_COLOR);
+        ospRelease(framebuffer);
+        framebuffer = ospNewFrameBuffer(osp::vec2i{this->width(), this->height()}, OSP_FB_SRGBA,
+                                        OSP_FB_COLOR | OSP_FB_ACCUM);
         ospCommit(framebuffer);
+    }
 
-        ospFrameBufferClear(framebuffer, OSP_FB_COLOR);
-
+    void paintEvent(QPaintEvent *event) override {
+        time_t start, end;
+        if(update_flag){
+            ospFrameBufferClear(framebuffer, OSP_FB_COLOR | OSP_FB_ACCUM);
+            clearUpdateFlag();
+        }
         start = time(NULL);
-        ospRenderFrame(framebuffer, renderer, OSP_FB_COLOR);
+        ospRenderFrame(framebuffer, renderer, OSP_FB_COLOR | OSP_FB_ACCUM);
         end = time(NULL);
         std::cout << "Rendering a frame costs: " << (end - start) << "s" << std::endl;
 
-        QImage image(image_size.x, image_size.y, QImage::Format_RGBA8888);
+        QImage image(this->width(), this->height(), QImage::Format_RGBA8888);
         uchar *fdata = (uchar *) ospMapFrameBuffer(framebuffer, OSP_FB_COLOR);
         int pos, r, g, b, a;
-        for (int i = 0; i < image_size.x; i++) {
-            for (int j = 0; j < image_size.y; j++) {
-                pos = (j * image_size.x + i) * 4;
+        for (int i = 0; i < image.width(); i++) {
+            for (int j = 0; j < image.height(); j++) {
+                pos = (j * image.height() + i) * 4;
                 r = fdata[pos + 0];
                 g = fdata[pos + 1];
                 b = fdata[pos + 2];
@@ -68,6 +73,8 @@ protected:
                 image.setPixel(i, j, qRgba(r, g, b, a));
             }
         }
+        QPainter painter(this);
+        QRect rect(0, 0, RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT);
         painter.drawImage(rect, image);
     }
 
@@ -77,11 +84,12 @@ protected:
         float dy = float(event->y() - last_pos.y()) / RENDER_WIDGET_HEIGHT;
         if (event->buttons() & Qt::RightButton) {
             camera.translate(-dx, -dy);
-            repaint();
+            setUpdateFlag();
         } else if (event->buttons() & Qt::LeftButton) {
             camera.rotate(dx, dy);
-            repaint();
+            setUpdateFlag();
         }
+        repaint();
         last_pos = event->pos();
     }
 
@@ -92,6 +100,7 @@ protected:
         } else {
             camera.scale(1 / CAMERA_SCALE_RATE);
         }
+        setUpdateFlag();
         repaint();
     }
 
@@ -99,13 +108,27 @@ protected:
         last_pos = event->pos();
     }
 
+    bool getUpdateFlag() {
+        return update_flag;
+    }
+
+    void setUpdateFlag() {
+        update_flag = true;
+    }
+
+    void clearUpdateFlag() {
+        update_flag = false;
+    }
+
 private:
     MyCamera camera;
     MyVolume volume;
     OSPRenderer renderer = NULL;
     OSPModel world = NULL;
+    OSPFrameBuffer framebuffer = NULL;
     std::string filename;
     QPoint last_pos;
+    bool update_flag = false;
 };
 
 #endif //RENDERWIDGET_H
