@@ -2,7 +2,7 @@
 
 MyVolume::MyVolume() {
     volume = ospNewVolume("block_bricked_volume");
-    gridOrigin = {-0.5f, -0.5f, 0};
+    gridOrigin = {-0.5f, -0.5f, -0.5f};
 }
 
 MyVolume::~MyVolume() {

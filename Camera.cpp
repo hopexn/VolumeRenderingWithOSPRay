@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include "common.h"
 
 MyCamera::MyCamera() {
     pos = {CAMERA_POSITION_X_INIT, CAMERA_POSITION_Y_INIT, CAMERA_POSITION_Z_INIT};
@@ -9,6 +8,7 @@ MyCamera::MyCamera() {
     //透视模式
     camera = ospNewCamera("perspective");
 
+    this->rotate(osp::vec3f{0, 0, 0});
     this->setup();
 }
 
@@ -16,22 +16,6 @@ MyCamera::~MyCamera() {
     ospRelease(camera);
 }
 
-
-void MyCamera::setPos(const osp::vec3f &pos) {
-    this->pos = pos;
-}
-
-void MyCamera::setDir(const osp::vec3f &dir) {
-    this->dir = dir;
-}
-
-void MyCamera::setUp(const osp::vec3f &up) {
-    this->up = up;
-}
-
-void MyCamera::setNearClipping(float nearClipping) {
-    this->nearClipping = nearClipping;
-}
 
 OSPCamera MyCamera::getCamera() {
     return camera;

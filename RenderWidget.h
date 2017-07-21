@@ -4,11 +4,12 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QMouseEvent>
 #include <string>
 #include "ospray/ospray.h"
 #include "Camera.h"
 #include "Volume.h"
-#include "GL/glew.h"
+#include "OpenGL.h"
 
 #define WIDTH 512
 #define HEIGHT 512
@@ -22,6 +23,7 @@ public:
 
         filename = "assets/volume/engine.vifo";
         volume.loadFromVifoFile(filename);
+
     }
 
     virtual ~RenderWidget() {
@@ -33,7 +35,6 @@ protected:
         time_t start, end;
         QPainter painter(this);
         QRect rect(0, 0, WIDTH, HEIGHT);
-
 
         ospRelease(world);
         world = ospNewModel();
@@ -52,11 +53,9 @@ protected:
         ospFrameBufferClear(framebuffer, OSP_FB_COLOR);
 
         start = time(NULL);
-        std::cout << "Rendering start" << std::endl;
         ospRenderFrame(framebuffer, renderer, OSP_FB_COLOR);
         end = time(NULL);
-        std::cout << "Rendering end" << std::endl;
-        std::cout << "Time cost: " << (end - start) << "s" << std::endl;
+        std::cout << "Rendering a frame costs: " << (end - start) << "s" << std::endl;
 
         QImage image(image_size.x, image_size.y, QImage::Format_RGBA8888);
         uchar *fdata = (uchar *) ospMapFrameBuffer(framebuffer, OSP_FB_COLOR);
@@ -74,12 +73,32 @@ protected:
         painter.drawImage(rect, image);
     }
 
+    void mouseMoveEvent(QMouseEvent *event) override {
+        float dx = float(event->x() - last_pos.x()) / WIDTH;
+        float dy = float(event->y() - last_pos.y()) / HEIGHT;
+
+        if (event->buttons() & Qt::LeftButton) {
+            rotation.x += 3.14 * dx;
+            rotation.y += 3.14 * dy;
+            camera.rotate(rotation);
+            repaint();
+        } else if (event->button() & Qt::RightButton) {
+            rotation.x += 3.14 * dx;
+            rotation.z += 3.14 * dy;
+        }
+        last_pos = event->pos();
+    }
+    void mousePressEvent(QMouseEvent *event) {
+        last_pos = event->pos();
+    }
 private:
     MyCamera camera;
     MyVolume volume;
     OSPRenderer renderer = NULL;
     OSPModel world = NULL;
     std::string filename;
+    QPoint last_pos;
+    osp::vec3f rotation;
 };
 
 

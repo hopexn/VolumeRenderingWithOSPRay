@@ -20,15 +20,15 @@ find_package(OSPRay REQUIRED)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 find_package(Qt5Widgets REQUIRED)
-#set(QT_USE_QTOPENGL TRUE)
+set(QT_USE_QTOPENGL TRUE)
 add_definitions(${QT_DEFINITIONS})
-#include_directories(${QT_QTOPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+include_directories(${QT_QTOPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
 #项目源代码
 set(HEAD_FILES RenderWidget.h Camera.h TF1D.h Volume.h)
 
 set(SOURCE_FILES main.cpp TF1D.cpp Volume.cpp Camera.cpp RenderWidget.cpp MainWIndow.cpp MainWIndow.h)
 
-add_executable(OSPRayProject ${SOURCE_FILES})
+add_executable(OSPRayProject ${SOURCE_FILES} ${HEAD_FILES})
 
 target_link_libraries(OSPRayProject ${OSPRAY_LIBRARIES}  ${Embree_libraries} Qt5::Widgets)
