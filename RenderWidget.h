@@ -34,7 +34,6 @@ protected:
         time_t start, end;
         QPainter painter(this);
         QRect rect(0, 0, RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT);
-
         ospRelease(world);
         world = ospNewModel();
         ospAddVolume(world, volume.volume);
@@ -42,7 +41,7 @@ protected:
 
         //设置Renderer
         ospSetObject(renderer, "model", world);
-        ospSetObject(renderer, "camera", camera.getCamera());
+        ospSetObject(renderer, "camera", camera.camera);
         ospCommit(renderer);
 
         osp::vec2i image_size = {RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT};
@@ -72,21 +71,28 @@ protected:
         painter.drawImage(rect, image);
     }
 
+    //鼠标移动事件，左键控制旋转， 右键控制移动
     void mouseMoveEvent(QMouseEvent *event) override {
         float dx = float(event->x() - last_pos.x()) / RENDER_WIDGET_WIDTH;
         float dy = float(event->y() - last_pos.y()) / RENDER_WIDGET_HEIGHT;
-
-        if (event->buttons() & Qt::LeftButton) {
-            camera.rotate(dx, dy);
+        if (event->buttons() & Qt::RightButton) {
+            camera.translate(-dx, -dy);
             repaint();
-        } else if (event->buttons() & Qt::RightButton) {
-            if (dy > 0)
-                camera.scale(CAMERA_SCALE_RATE);
-            else
-                camera.scale(1/CAMERA_SCALE_RATE);
+        } else if (event->buttons() & Qt::LeftButton) {
+            camera.rotate(dx, dy);
             repaint();
         }
         last_pos = event->pos();
+    }
+
+    //滚轮事件， 控制放缩
+    void wheelEvent(QWheelEvent *event) override {
+        if (event->delta() > 0) {
+            camera.scale(CAMERA_SCALE_RATE);
+        } else {
+            camera.scale(1 / CAMERA_SCALE_RATE);
+        }
+        repaint();
     }
 
     void mousePressEvent(QMouseEvent *event) override {

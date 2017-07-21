@@ -10,17 +10,13 @@
 #include <glm/gtx/fast_square_root.hpp>
 #include "util/Vector.h"
 
-using namespace std;
-
 class MyCamera {
 public:
     MyCamera();
 
     ~MyCamera();
 
-    OSPCamera getCamera();
-
-    void setup();
+    void update();
 
     OSPCamera camera = NULL;
 
@@ -42,15 +38,32 @@ public:
         pos = Rotate(pos, center, rotation_axis, theta);
         dir = Rotate(dir, rotation_axis, theta).normalize();
         up = Rotate(up, rotation_axis, theta).normalize();
-        std::cout << "pos" << pos << endl;
-        std::cout << "dir" << dir << endl;
-        std::cout << "up" << up << endl;
-        setup();
+        std::cout << "rotation" << std::endl;
+        std::cout << "pos" << pos << std::endl;
+        std::cout << "dir" << dir << std::endl;
+        std::cout << "up" << up << std::endl;
+        update();
     }
 
     void scale(float s) {
         pos = center + (pos - center) * s;
-        setup();
+        std::cout << "scale" << std::endl;
+        std::cout << "pos" << pos << std::endl;
+        std::cout << "dir" << dir << std::endl;
+        std::cout << "up" << up << std::endl;
+        update();
+    }
+
+    void translate(float dx, float dy) {
+        Vector3f right = Cross(dir, up);
+        Vector3f translation = ((right * dx) + (up * dy));
+        center += translation;
+        pos += translation;
+        std::cout << "translation" << std::endl;
+        std::cout << "pos" << pos << std::endl;
+        std::cout << "dir" << dir << std::endl;
+        std::cout << "up" << up << std::endl;
+        update();
     }
 
     osp::vec3f osp_vec(Vector3f vec) {
