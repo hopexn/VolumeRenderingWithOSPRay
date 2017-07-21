@@ -15,8 +15,8 @@ public:
 
     void loadFromVifoFile(std::string filename);
 
-    osp::Volume *getVolume();
-private:
+    TF1D tf1d;
+
     OSPVolume volume = NULL;
 
 private:
@@ -27,13 +27,7 @@ private:
     osp::vec3f gridSpacing;
     osp::vec3f gridOrigin;
 
-    TF1D tf1d;
-
     float samplingRate;
-
-    void loadRawFile(std::string filename);
-
-    void setup();
 };
 
 #endif //VOLUME_HPP

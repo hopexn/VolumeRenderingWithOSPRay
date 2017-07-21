@@ -16,10 +16,9 @@ public:
 
     void writeToFile(std::string filename);
 
-    OSPTransferFunction getTransferFunction();
+    OSPTransferFunction tf;
 
 private:
-    OSPTransferFunction tf;
 
     int num;
     std::vector<osp::vec3f> colors;

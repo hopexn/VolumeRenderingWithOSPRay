@@ -53,10 +53,6 @@ void MyVolume::loadFromVifoFile(std::string filename) {
     ospSetVec3f(volume, "gridSpacing", gridSpacing);
     ospSetVec2f(volume, "voxelRange", osp::vec2f{0.0, 255.0f});
     ospSet1f(volume, "samplingRate", VOLUME_SAMPLINGRATE_INIT);
-    ospSetObject(volume, "transferFunction", tf1d.getTransferFunction());
+    ospSetObject(volume, "transferFunction", tf1d.tf);
     ospCommit(volume);
-}
-
-osp::Volume *MyVolume::getVolume() {
-    return volume;
 }

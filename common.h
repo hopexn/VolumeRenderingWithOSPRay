@@ -8,7 +8,7 @@
 //相机位置
 #define CAMERA_POSITION_X_INIT 0.0f
 #define CAMERA_POSITION_Y_INIT 0.0f
-#define CAMERA_POSITION_Z_INIT 5.0f
+#define CAMERA_POSITION_Z_INIT 1.7f
 
 //相机朝向
 #define CAMERA_DIRECTION_X_INIT 0.0f

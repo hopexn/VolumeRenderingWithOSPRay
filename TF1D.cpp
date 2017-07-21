@@ -65,9 +65,6 @@ void TF1D::writeToFile(std::string filename) {
     fclose(fp);
 }
 
-OSPTransferFunction TF1D::getTransferFunction() {
-    return tf;
-}
 
 void TF1D::setup() {
     int item_num = 256;
