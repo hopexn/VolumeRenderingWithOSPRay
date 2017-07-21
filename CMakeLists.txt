@@ -24,11 +24,15 @@ set(QT_USE_QTOPENGL TRUE)
 add_definitions(${QT_DEFINITIONS})
 include_directories(${QT_QTOPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
+find_package(Qt5OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
+set(QT_USE_QTOPENGL TRUE)
+
 #项目源代码
-set(HEAD_FILES RenderWidget.h Camera.h TF1D.h Volume.h)
+set(HEAD_FILES RenderWidget.h Camera.h TF1D.h Volume.h util/Vector.h)
 
 set(SOURCE_FILES main.cpp TF1D.cpp Volume.cpp Camera.cpp RenderWidget.cpp MainWIndow.cpp MainWIndow.h)
 
 add_executable(OSPRayProject ${SOURCE_FILES} ${HEAD_FILES})
 
-target_link_libraries(OSPRayProject ${OSPRAY_LIBRARIES}  ${Embree_libraries} Qt5::Widgets)
+target_link_libraries(OSPRayProject ${OSPRAY_LIBRARIES}  ${Embree_libraries} Qt5::Widgets Qt5::OpenGL ${OPENGL_gl_LIBRARY})

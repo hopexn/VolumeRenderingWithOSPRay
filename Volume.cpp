@@ -2,7 +2,6 @@
 
 MyVolume::MyVolume() {
     volume = ospNewVolume("block_bricked_volume");
-    gridOrigin = {-0.5f, -0.5f, -0.5f};
 }
 
 MyVolume::~MyVolume() {
@@ -24,6 +23,14 @@ void MyVolume::loadFromVifoFile(std::string filename) {
     fscanf(fp, "%s", temp);
     fclose(fp);
 
+
+    int max_dim = std::max(dims.x, std::max(dims.y, dims.z));
+    float xfSize = (float) dims.x / max_dim;
+    float yfSize = (float) dims.y / max_dim;
+    float zfSize = (float) dims.z / max_dim;
+
+    gridOrigin = {-0.5f * xfSize, -0.5f * yfSize, -0.5f * zfSize};
+
     //加载raw文件
     std::string volume_file = filename.substr(0, filename.rfind('/') + 1);
     volume_file += temp;
@@ -39,7 +46,7 @@ void MyVolume::loadFromVifoFile(std::string filename) {
     fclose(fp);
 
     //根据维度确定步长
-    gridSpacing = {1.0f / dims.x, 1.0f / dims.y, 1.0f / dims.z};
+    gridSpacing = {xfSize / dims.x, yfSize / dims.y, zfSize / dims.z};
 
     std::string tf_file = volume_file.substr(0, volume_file.rfind('.') + 1);
     tf_file += "TF1D";

@@ -10,20 +10,19 @@
 #include "Camera.h"
 #include "Volume.h"
 #include "OpenGL.h"
-
-#define WIDTH 512
-#define HEIGHT 512
+#include "util/Vector.h"
 
 class RenderWidget : public QWidget {
 Q_OBJECT
 public:
     RenderWidget() {
+        setFixedHeight(RENDER_WIDGET_HEIGHT);
+        setFixedWidth(RENDER_WIDGET_WIDTH);
         renderer = ospNewRenderer("scivis");
         world = ospNewModel();
 
         filename = "assets/volume/engine.vifo";
         volume.loadFromVifoFile(filename);
-
     }
 
     virtual ~RenderWidget() {
@@ -34,7 +33,7 @@ protected:
     void paintEvent(QPaintEvent *event) override {
         time_t start, end;
         QPainter painter(this);
-        QRect rect(0, 0, WIDTH, HEIGHT);
+        QRect rect(0, 0, RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT);
 
         ospRelease(world);
         world = ospNewModel();
@@ -46,7 +45,7 @@ protected:
         ospSetObject(renderer, "camera", camera.getCamera());
         ospCommit(renderer);
 
-        osp::vec2i image_size = {WIDTH, HEIGHT};
+        osp::vec2i image_size = {RENDER_WIDGET_WIDTH, RENDER_WIDGET_HEIGHT};
         OSPFrameBuffer framebuffer = ospNewFrameBuffer(image_size, OSP_FB_SRGBA, OSP_FB_COLOR);
         ospCommit(framebuffer);
 
@@ -74,23 +73,22 @@ protected:
     }
 
     void mouseMoveEvent(QMouseEvent *event) override {
-        float dx = float(event->x() - last_pos.x()) / WIDTH;
-        float dy = float(event->y() - last_pos.y()) / HEIGHT;
+        float dx = float(event->x() - last_pos.x()) / RENDER_WIDGET_WIDTH;
+        float dy = float(event->y() - last_pos.y()) / RENDER_WIDGET_HEIGHT;
 
         if (event->buttons() & Qt::LeftButton) {
-            rotation.x += 3.14 * dx;
-            rotation.y += 3.14 * dy;
-            camera.rotate(rotation);
+            camera.rotate(dx, dy);
             repaint();
-        } else if (event->button() & Qt::RightButton) {
-            rotation.x += 3.14 * dx;
-            rotation.z += 3.14 * dy;
+        } else if (event->buttons() & Qt::RightButton) {
+            repaint();
         }
         last_pos = event->pos();
     }
-    void mousePressEvent(QMouseEvent *event) {
+
+    void mousePressEvent(QMouseEvent *event) override {
         last_pos = event->pos();
     }
+
 private:
     MyCamera camera;
     MyVolume volume;
@@ -98,8 +96,6 @@ private:
     OSPModel world = NULL;
     std::string filename;
     QPoint last_pos;
-    osp::vec3f rotation;
 };
-
 
 #endif //RENDERWIDGET_H

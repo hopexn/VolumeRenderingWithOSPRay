@@ -18,7 +18,10 @@
 #define CAMERA_UP_Y_INIT 1.0f
 #define CAMERA_UP_Z_INIT 0.0f
 
-//Volume采样率，默认100%
+//Volume采样率，默认1.0
 #define VOLUME_SAMPLINGRATE_INIT 1.0f
+
+#define RENDER_WIDGET_WIDTH 768
+#define RENDER_WIDGET_HEIGHT 768
 
 #endif //COMMON_H
