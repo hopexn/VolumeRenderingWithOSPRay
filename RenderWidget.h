@@ -32,17 +32,23 @@ public:
     void openVolumeFile(std::string filename) {
         this->filename = filename;
         loadVolume(filename);
-        this->update();
     }
 
-    void loadTF1D() {
 
+    void loadTF1D(std::string filename) {
+        volume.tf1d.loadFromFile(filename);
+        setup();
     }
 
-protected:
-    void loadVolume(std::string filename) {
-        volume.loadFromVifoFile(filename);
+    void setCameraPos(Vector3f pos, Vector3f dir, Vector3f up) {
+        camera.pos = pos;
+        camera.dir = dir;
+        camera.up = up;
+        camera.center = Vector3f(0, 0, 0);
+        camera.update();
+    }
 
+    void setup() {
         ospRelease(world);
         world = ospNewModel();
         ospAddVolume(world, volume.volume);
@@ -59,16 +65,19 @@ protected:
         ospCommit(framebuffer);
     }
 
+protected:
+    void loadVolume(std::string filename) {
+        volume.loadFromVifoFile(filename);
+        setup();
+    }
+
+
     void paintEvent(QPaintEvent *event) override {
-        time_t start, end;
         if (update_flag) {
             ospFrameBufferClear(framebuffer, OSP_FB_COLOR | OSP_FB_ACCUM);
             clearUpdateFlag();
         }
-        start = time(NULL);
         ospRenderFrame(framebuffer, renderer, OSP_FB_COLOR | OSP_FB_ACCUM);
-        end = time(NULL);
-        std::cout << "Rendering a frame costs: " << (end - start) << "s" << std::endl;
 
         QImage image(this->width(), this->height(), QImage::Format_RGBA8888);
         uchar *fdata = (uchar *) ospMapFrameBuffer(framebuffer, OSP_FB_COLOR);

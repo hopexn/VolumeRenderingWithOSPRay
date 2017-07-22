@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-
+#define DEBUG
 #define APPLE
 #define MAX_BUFFER_SIZE 256
 
@@ -21,7 +21,7 @@
 #define CAMERA_SCALE_RATE 0.88f
 
 //Volume采样率，默认1.0
-#define VOLUME_SAMPLINGRATE_INIT 1.0f
+#define VOLUME_SAMPLINGRATE_INIT 0.5f
 
 #define RENDER_WIDGET_WIDTH 768
 #define RENDER_WIDGET_HEIGHT 768

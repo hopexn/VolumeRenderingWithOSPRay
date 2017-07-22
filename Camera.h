@@ -38,19 +38,23 @@ public:
         pos = Rotate(pos, center, rotation_axis, theta);
         dir = Rotate(dir, rotation_axis, theta).normalize();
         up = Rotate(up, rotation_axis, theta).normalize();
+#ifdef DEBUG
         std::cout << "rotation" << std::endl;
         std::cout << "pos" << pos << std::endl;
         std::cout << "dir" << dir << std::endl;
         std::cout << "up" << up << std::endl;
+#endif
         update();
     }
 
     void scale(float s) {
         pos = center + (pos - center) * s;
+#ifdef DEBUG
         std::cout << "scale" << std::endl;
         std::cout << "pos" << pos << std::endl;
         std::cout << "dir" << dir << std::endl;
         std::cout << "up" << up << std::endl;
+#endif
         update();
     }
 
@@ -59,10 +63,12 @@ public:
         Vector3f translation = ((right * dx) + (up * dy));
         center += translation;
         pos += translation;
+#ifdef DEBUG
         std::cout << "translation" << std::endl;
         std::cout << "pos" << pos << std::endl;
         std::cout << "dir" << dir << std::endl;
         std::cout << "up" << up << std::endl;
+#endif
         update();
     }
 

@@ -64,11 +64,11 @@ public:
         negYView = new QAction(tr("Negative Y View"), this);
         connect(negYView, SIGNAL(triggered()), this, SLOT(neg_y_view()));
 
-        negZView = new QAction(tr("Negative View"), this);
+        negZView = new QAction(tr("Negative Z View"), this);
         connect(negZView, SIGNAL(triggered()), this, SLOT(neg_z_view()));
 
         about = new QAction(tr("About us"));
-        connect(about, SIGNAL(triggered()), this, SLOT());
+        connect(about, SIGNAL(triggered()), this, SLOT(about_us()));
     }
 
     void createMenus() {
@@ -96,6 +96,7 @@ public:
 private:
     RenderWidget *render;
     QString currVolumeFile;
+    QString currTF1DFile;
     //菜单项
     QMenu *fileMenu, *shaderMenu, *viewMenu, *helpMenu;
     //菜单子项
@@ -112,6 +113,9 @@ private slots:
     };
 
     void tf1d() {
+        currTF1DFile = QFileDialog::getOpenFileName(this, tr("Open a TF1D Data"), currVolumeFile,
+                                                    tr("TF1D Data (*.TF1D)"));
+        render->loadTF1D(currVolumeFile.toStdString());
     }
 
     void tf1d_shading() {
@@ -119,31 +123,49 @@ private slots:
     }
 
     void default_view() {
-
+        pos_z_view();
     }
 
     void pos_x_view() {
-
+        render->setCameraPos(Vector3f(1.0f, 0, 0), Vector3f(-1.0f, 0, 0), Vector3f(0, 1.0f, 0));
+        render->setup();
+        render->repaint();
     }
 
     void pos_y_view() {
-
+        render->setCameraPos(Vector3f(0, 1.0f, 0), Vector3f(0, -1.0f, 0), Vector3f(1.0f, 0, 0));
+        render->setup();
+        render->repaint();
     }
 
     void pos_z_view() {
-
+        render->setCameraPos(Vector3f(0, 0, 1.0f), Vector3f(0, 0, -1.0f), Vector3f(0, 1.0f, 0));
+        render->setup();
+        render->repaint();
     }
 
     void neg_x_view() {
-
+        render->setCameraPos(Vector3f(-1.0f, 0, 0), Vector3f(1.0f, 0, 0), Vector3f(0, 1.0f, 0));
+        render->setup();
+        render->repaint();
     }
 
     void neg_y_view() {
-
+        render->setCameraPos(Vector3f(0, -1.0f, 0), Vector3f(0, 1.0f, 0), Vector3f(1.0f, 0, 0));
+        render->setup();
+        render->repaint();
     }
 
     void neg_z_view() {
+        render->setCameraPos(Vector3f(0, 0, -1.0f), Vector3f(0, 0, 1.0f), Vector3f(0, 1.0f, 0));
+        render->setup();
+        render->repaint();
+    }
 
+    void about_us() {
+        render->setCameraPos(Vector3f(1.0f, 0, 0), Vector3f(-1.0f, 0, 0), Vector3f(0, 1.0f, 0));
+        render->setup();
+        render->repaint();
     }
 };
 
