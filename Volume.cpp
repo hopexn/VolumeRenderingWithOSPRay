@@ -2,6 +2,7 @@
 
 MyVolume::MyVolume() {
     volume = ospNewVolume("block_bricked_volume");
+    samplingRate = VOLUME_SAMPLINGRATE_INIT;
 }
 
 MyVolume::~MyVolume() {

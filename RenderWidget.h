@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QWheelEvent>
 #include <string>
 #include "ospray/ospray.h"
 #include "Camera.h"
@@ -29,16 +30,18 @@ public:
         ospRelease(renderer);
     }
 
-    void openVolumeFile(std::string filename) {
+    void loadVolume(std::string filename) {
         this->filename = filename;
-        loadVolume(filename);
+        volume.loadFromVifoFile(filename);
+        setup();
+        repaint();
     }
-
 
     void loadTF1D(std::string filename) {
         volume.tf1d.loadFromFile(filename);
         volume.setup();
         setup();
+        repaint();
     }
 
     void setCameraPos(Vector3f pos, Vector3f dir, Vector3f up) {
@@ -47,6 +50,14 @@ public:
         camera.up = up;
         camera.center = Vector3f(0, 0, 0);
         camera.update();
+        setup();
+        repaint();
+    }
+
+    void setSamplingRate(float value) {
+        volume.setSamplingRate(value);
+        setup();
+        repaint();
     }
 
     void setup() {
@@ -67,11 +78,6 @@ public:
     }
 
 protected:
-    void loadVolume(std::string filename) {
-        volume.loadFromVifoFile(filename);
-        setup();
-    }
-
 
     void paintEvent(QPaintEvent *event) override {
         if (update_flag) {

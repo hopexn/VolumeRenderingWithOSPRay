@@ -7,6 +7,9 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QVBoxLayout>
+#include <QSpinBox>
+#include <QSlider>
+#include <QLabel>
 #include "RenderWidget.h"
 
 class MainWindow : public QMainWindow {
@@ -15,14 +18,60 @@ public:
     MainWindow() {
         setFixedWidth(1024);
         setFixedHeight(768);
+        centralWidget = new QWidget(this);
+        setCentralWidget(centralWidget);
+        centralLayout = new QHBoxLayout(centralWidget);
+
         render = new RenderWidget;
         createActions();
         createMenus();
-        layout()->addWidget(render);
+        rightLayout = new QGridLayout;
+        rightLayout->setAlignment(Qt::AlignTop);
+        samplingRateLabel = new QLabel(tr("Sampling rate:"));
+        samplingRateLabel->setFixedWidth(100);
+        samplingRateLabel->setFixedHeight(20);
+        samplingRateSpinBox = new QDoubleSpinBox;
+        samplingRateSlider = new QSlider(Qt::Horizontal);
+        samplingRateSpinBox->setRange(0, RENDER_MAX_SAMPLING_RATE);
+        samplingRateSlider->setRange(0, (int) (RENDER_MAX_SAMPLING_RATE * 100));
+        samplingRateSpinBox->setValue(VOLUME_SAMPLINGRATE_INIT);
+        samplingRateSlider->setValue((int) (VOLUME_SAMPLINGRATE_INIT * 100));
+        connect(samplingRateSpinBox, SIGNAL(valueChanged(double)), this, SLOT(samplingRateChanged(double)));
+        connect(samplingRateSlider, SIGNAL(valueChanged(int)), this, SLOT(samplingRateChanged(int)));
+
+        rightLayout->addWidget(samplingRateLabel, 0, 0, 1, 2);
+        rightLayout->addWidget(samplingRateSpinBox, 1, 0, 1, 1);
+        rightLayout->addWidget(samplingRateSlider, 1, 1, 1, 1);
+
+        centralLayout->addWidget(render);
+        centralLayout->addLayout(rightLayout, 10);
     }
 
     virtual ~MainWindow() {
         delete render;
+        delete fileMenu;
+        delete shaderMenu;
+        delete viewMenu;
+        delete helpMenu;
+        delete openAct;
+        delete exitAct;
+        delete TF1DAct;
+        delete TF1DShadingAct;
+        delete posXView;
+        delete negXView;
+        delete posYView;
+        delete negYView;
+        delete posZView;
+        delete negZView;
+        delete about;
+
+        delete centralWidget;
+        delete centralLayout;
+        delete rightLayout;
+
+        delete samplingRateLabel;
+        delete samplingRateSpinBox;
+        delete samplingRateSlider;
     }
 
     void createActions() {
@@ -46,9 +95,6 @@ public:
 
 
         //View Menu
-        defaultView = new QAction(tr("Default View"), this);
-        connect(defaultView, SIGNAL(triggered()), this, SLOT(default_view()));
-
         posXView = new QAction(tr("Positive X View"), this);
         connect(posXView, SIGNAL(triggered()), this, SLOT(pos_x_view()));
 
@@ -81,7 +127,6 @@ public:
         shaderMenu->addAction(TF1DShadingAct);
 
         viewMenu = menuBar()->addMenu(tr("&View"));
-        viewMenu->addAction(defaultView);
         viewMenu->addAction(posXView);
         viewMenu->addAction(posYView);
         viewMenu->addAction(posZView);
@@ -95,6 +140,15 @@ public:
 
 private:
     RenderWidget *render;
+
+    QWidget *centralWidget;
+    QHBoxLayout *centralLayout;
+    QGridLayout *rightLayout;
+
+    QLabel *samplingRateLabel;
+    QDoubleSpinBox *samplingRateSpinBox;
+    QSlider *samplingRateSlider;
+
     QString currVolumeFile;
     QString currTF1DFile;
     //菜单项
@@ -102,14 +156,14 @@ private:
     //菜单子项
     QAction *openAct, *exitAct;
     QAction *TF1DAct, *TF1DShadingAct;
-    QAction *defaultView, *posXView, *negXView, *posYView, *negYView, *posZView, *negZView;
+    QAction *posXView, *negXView, *posYView, *negYView, *posZView, *negZView;
     QAction *about;
 private slots:
 
     void open() {
         currVolumeFile = QFileDialog::getOpenFileName(this, tr("Open a Volume Data"), currVolumeFile,
                                                       tr("Volume Data (*.vifo)"));
-        render->openVolumeFile(currVolumeFile.toStdString());
+        render->loadVolume(currVolumeFile.toStdString());
     };
 
     void tf1d() {
@@ -117,58 +171,48 @@ private slots:
                                                     tr("TF1D Data (*.TF1D)"));
         std::cout << "flag" << std::endl;
         render->loadTF1D(currTF1DFile.toStdString());
-        render->setup();
-        render->repaint();
     }
 
     void tf1d_shading() {
 
     }
 
-    void default_view() {
-        pos_z_view();
-    }
-
     void pos_x_view() {
         render->setCameraPos(Vector3f(1.0f, 0, 0), Vector3f(-1.0f, 0, 0), Vector3f(0, 1.0f, 0));
-        render->setup();
-        render->repaint();
     }
 
     void pos_y_view() {
         render->setCameraPos(Vector3f(0, 1.0f, 0), Vector3f(0, -1.0f, 0), Vector3f(1.0f, 0, 0));
-        render->setup();
-        render->repaint();
     }
 
     void pos_z_view() {
         render->setCameraPos(Vector3f(0, 0, 1.0f), Vector3f(0, 0, -1.0f), Vector3f(0, 1.0f, 0));
-        render->setup();
-        render->repaint();
     }
 
     void neg_x_view() {
         render->setCameraPos(Vector3f(-1.0f, 0, 0), Vector3f(1.0f, 0, 0), Vector3f(0, 1.0f, 0));
-        render->setup();
-        render->repaint();
     }
 
     void neg_y_view() {
         render->setCameraPos(Vector3f(0, -1.0f, 0), Vector3f(0, 1.0f, 0), Vector3f(1.0f, 0, 0));
-        render->setup();
-        render->repaint();
     }
 
     void neg_z_view() {
         render->setCameraPos(Vector3f(0, 0, -1.0f), Vector3f(0, 0, 1.0f), Vector3f(0, 1.0f, 0));
-        render->setup();
-        render->repaint();
     }
 
     void about_us() {
         render->setCameraPos(Vector3f(1.0f, 0, 0), Vector3f(-1.0f, 0, 0), Vector3f(0, 1.0f, 0));
-        render->setup();
-        render->repaint();
+    }
+
+    void samplingRateChanged(int value) {
+        samplingRateSpinBox->setValue((double) value / 100);
+        render->setSamplingRate((float) value / 100);
+    }
+
+    void samplingRateChanged(double value) {
+        samplingRateSlider->setValue((int) (value * 100));
+        render->setSamplingRate((float) value);
     }
 };
 
