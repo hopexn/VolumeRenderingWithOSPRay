@@ -78,6 +78,12 @@ public:
         repaint();
     }
 
+    void setSpecularRate(float specularRate, int color) {
+        volume.setSpecularRate(specularRate, color);
+        setup();
+        repaint();
+    }
+
 protected:
 
     void paintEvent(QPaintEvent *event) override {

@@ -49,6 +49,41 @@ public:
         connect(clippingSpinBox, SIGNAL(valueChanged(double)), this, SLOT(nearClipChanged(double)));
         connect(clippingSlider, SIGNAL(valueChanged(int)), this, SLOT(nearClipChanged(int)));
 
+        specularLabel = new QLabel("Specular rate:");
+        //RED
+        specularSpinBoxRed = new QDoubleSpinBox;
+        specularSliderRed = new QSlider(Qt::Horizontal);
+        specularSpinBoxRed->setRange(0, RENDER_MAX_SPECULAR_RATE);
+        specularSliderRed->setRange(0, (int) (RENDER_MAX_SPECULAR_RATE * 100));
+        specularSpinBoxRed->setValue(RENDER_SPECULAR_RATE_INIT);
+        specularSliderRed->setValue((int) (RENDER_SPECULAR_RATE_INIT * 100));
+        connect(specularSpinBoxRed, SIGNAL(valueChanged(double)),
+                this, SLOT(specularRateRedChanged(double)));
+        connect(specularSliderRed, SIGNAL(valueChanged(int)),
+                this, SLOT(specularRateRedChanged(int)));
+        //GREEN
+        specularSpinBoxGreen = new QDoubleSpinBox;
+        specularSliderGreen = new QSlider(Qt::Horizontal);
+        specularSpinBoxGreen->setRange(0, RENDER_MAX_SPECULAR_RATE);
+        specularSliderGreen->setRange(0, (int) (RENDER_MAX_SPECULAR_RATE * 100));
+        specularSpinBoxGreen->setValue(RENDER_SPECULAR_RATE_INIT);
+        specularSliderGreen->setValue((int) (RENDER_SPECULAR_RATE_INIT * 100));
+        connect(specularSpinBoxGreen, SIGNAL(valueChanged(double)),
+                this, SLOT(specularRateGreenChanged(double)));
+        connect(specularSliderGreen, SIGNAL(valueChanged(int)),
+                this, SLOT(specularRateGreenChanged(int)));
+        //BLUE
+        specularSpinBoxBlue = new QDoubleSpinBox;
+        specularSliderBlue = new QSlider(Qt::Horizontal);
+        specularSpinBoxBlue->setRange(0, RENDER_MAX_SPECULAR_RATE);
+        specularSliderBlue->setRange(0, (int) (RENDER_MAX_SPECULAR_RATE * 100));
+        specularSpinBoxBlue->setValue(RENDER_SPECULAR_RATE_INIT);
+        specularSliderBlue->setValue((int) (RENDER_SPECULAR_RATE_INIT * 100));
+        connect(specularSpinBoxBlue, SIGNAL(valueChanged(double)),
+                this, SLOT(specularRateBlueChanged(double)));
+        connect(specularSliderBlue, SIGNAL(valueChanged(int)),
+                this, SLOT(specularRateBlueChanged(int)));
+
         rightLayout->addWidget(samplingRateLabel, 0, 0, 1, 2);
         rightLayout->addWidget(samplingRateSpinBox, 1, 0, 1, 1);
         rightLayout->addWidget(samplingRateSlider, 1, 1, 1, 1);
@@ -56,6 +91,14 @@ public:
         rightLayout->addWidget(clippingLabel, 3, 0, 1, 2);
         rightLayout->addWidget(clippingSpinBox, 4, 0, 1, 1);
         rightLayout->addWidget(clippingSlider, 4, 1, 1, 1);
+
+        rightLayout->addWidget(specularLabel, 6, 0, 1, 2);
+        rightLayout->addWidget(specularSpinBoxRed, 7, 0, 1, 1);
+        rightLayout->addWidget(specularSliderRed, 7, 1, 1, 1);
+        rightLayout->addWidget(specularSpinBoxGreen, 8, 0, 1, 1);
+        rightLayout->addWidget(specularSliderGreen, 8, 1, 1, 1);
+        rightLayout->addWidget(specularSpinBoxBlue, 9, 0, 1, 1);
+        rightLayout->addWidget(specularSliderBlue, 9, 1, 1, 1);
 
         centralLayout->addWidget(render);
         centralLayout->addLayout(rightLayout, 10);
@@ -173,6 +216,19 @@ private:
     QDoubleSpinBox *clippingSpinBox;
     QSlider *clippingSlider;
 
+
+    //设置镜面反射率
+    QLabel *specularLabel;
+    QDoubleSpinBox *specularSpinBoxRed;
+    QSlider *specularSliderRed;
+
+    QDoubleSpinBox *specularSpinBoxGreen;
+    QSlider *specularSliderGreen;
+
+    QDoubleSpinBox *specularSpinBoxBlue;
+    QSlider *specularSliderBlue;
+
+
     QString currVolumeFile;
     QString currTF1DFile;
     //菜单项
@@ -248,7 +304,36 @@ private slots:
         clippingSlider->setValue((int) (value * 100));
         render->setNearClip((float) value);
     }
-};
 
+    void specularRateRedChanged(int value) {
+        specularSpinBoxRed->setValue((double) value / 100);
+        render->setSpecularRate((float) value / 100, SPECULAR_COLOR_RED);
+    }
+
+    void specularRateRedChanged(double value) {
+        specularSliderRed->setValue((int) (value * 100));
+        render->setSpecularRate((float) value, SPECULAR_COLOR_RED);
+    }
+
+    void specularRateGreenChanged(int value) {
+        specularSpinBoxGreen->setValue((double) value / 100);
+        render->setSpecularRate((float) value / 100, SPECULAR_COLOR_GREEN);
+    }
+
+    void specularRateGreenChanged(double value) {
+        specularSliderGreen->setValue((int) (value * 100));
+        render->setSpecularRate((float) value, SPECULAR_COLOR_GREEN);
+    }
+
+    void specularRateBlueChanged(int value) {
+        specularSpinBoxBlue->setValue((double) value / 100);
+        render->setSpecularRate((float) value / 100, SPECULAR_COLOR_BLUE);
+    }
+
+    void specularRateBlueChanged(double value) {
+        specularSliderBlue->setValue((int) (value * 100));
+        render->setSpecularRate((float) value, SPECULAR_COLOR_BLUE);
+    }
+};
 
 #endif // MAINWINDOW_H

@@ -3,6 +3,7 @@
 MyVolume::MyVolume() {
     volume = ospNewVolume("block_bricked_volume");
     samplingRate = VOLUME_SAMPLINGRATE_INIT;
+    specularRate = {RENDER_SPECULAR_RATE_INIT, RENDER_SPECULAR_RATE_INIT, RENDER_SPECULAR_RATE_INIT};
 }
 
 MyVolume::~MyVolume() {

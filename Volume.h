@@ -26,6 +26,7 @@ public:
         ospSetVec3f(volume, "gridSpacing", gridSpacing);
         ospSetVec2f(volume, "voxelRange", osp::vec2f{0.0, 255.0f});
         ospSet1f(volume, "samplingRate", samplingRate);
+        ospSetVec3f(volume, "specular", specularRate);
         ospSetObject(volume, "transferFunction", tf1d.tf);
         ospCommit(volume);
     }
@@ -40,6 +41,23 @@ public:
         setup();
     }
 
+    void setSpecularRate(float specularRate, int color) {
+        switch (color) {
+            case SPECULAR_COLOR_RED:
+                this->specularRate.x = specularRate;
+                break;
+            case SPECULAR_COLOR_GREEN:
+                this->specularRate.y = specularRate;
+                break;
+            case SPECULAR_COLOR_BLUE:
+                this->specularRate.z = specularRate;
+                break;
+            default:
+                std::cout << "Undefine Specular color!" << std::endl;
+        }
+        setup();
+    }
+
 private:
     TF1D tf1d;
 
@@ -51,6 +69,7 @@ private:
     osp::vec3f gridOrigin;
 
     float samplingRate;
+    osp::vec3f specularRate;
 };
 
 #endif //VOLUME_HPP
