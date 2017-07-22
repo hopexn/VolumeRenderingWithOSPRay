@@ -79,13 +79,17 @@ public:
         delete negZView;
         delete about;
 
-        delete centralWidget;
-        delete centralLayout;
+//        delete centralWidget;  //这两个已经被释放， 无需再次释放
+//        delete centralLayout;
         delete rightLayout;
 
         delete samplingRateLabel;
         delete samplingRateSpinBox;
         delete samplingRateSlider;
+
+        delete clippingSlider;
+        delete clippingSpinBox;
+        delete clippingLabel;
     }
 
     void createActions() {

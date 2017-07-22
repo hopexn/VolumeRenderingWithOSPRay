@@ -15,8 +15,6 @@ public:
 
     void loadFromVifoFile(std::string filename);
 
-    TF1D tf1d;
-
     OSPVolume volume = NULL;
 
     void setup() {
@@ -37,7 +35,14 @@ public:
         setup();
     }
 
+    void loadTF1D(std::string filename) {
+        tf1d.loadFromFile(filename);
+        setup();
+    }
+
 private:
+    TF1D tf1d;
+
     osp::vec3i dims;
     osp::vec3i space;
     unsigned char *buf;

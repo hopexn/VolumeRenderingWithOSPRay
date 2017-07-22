@@ -30,5 +30,4 @@
 #define RENDER_WIDGET_HEIGHT 768
 
 
-
 #endif //COMMON_H

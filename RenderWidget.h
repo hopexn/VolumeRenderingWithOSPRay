@@ -38,8 +38,7 @@ public:
     }
 
     void loadTF1D(std::string filename) {
-        volume.tf1d.loadFromFile(filename);
-        volume.setup();
+        volume.loadTF1D(filename);
         setup();
         repaint();
     }
@@ -147,7 +146,6 @@ protected:
     void clearUpdateFlag() {
         update_flag = false;
     }
-
 
 
 private:
