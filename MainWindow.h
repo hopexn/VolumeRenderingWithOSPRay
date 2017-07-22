@@ -115,7 +115,10 @@ private slots:
     void tf1d() {
         currTF1DFile = QFileDialog::getOpenFileName(this, tr("Open a TF1D Data"), currVolumeFile,
                                                     tr("TF1D Data (*.TF1D)"));
-        render->loadTF1D(currVolumeFile.toStdString());
+        std::cout << "flag" << std::endl;
+        render->loadTF1D(currTF1DFile.toStdString());
+        render->setup();
+        render->repaint();
     }
 
     void tf1d_shading() {

@@ -37,6 +37,7 @@ public:
 
     void loadTF1D(std::string filename) {
         volume.tf1d.loadFromFile(filename);
+        volume.setup();
         setup();
     }
 

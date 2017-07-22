@@ -19,6 +19,19 @@ public:
 
     OSPVolume volume = NULL;
 
+    void setup() {
+        //设置Volume参数
+        ospSetString(volume, "voxelType", "uchar");
+        ospSetVec3i(volume, "dimensions", dims);
+        ospSetRegion(volume, buf, osp::vec3i{0, 0, 0}, dims);
+        ospSetVec3f(volume, "gridOrigin", gridOrigin);
+        ospSetVec3f(volume, "gridSpacing", gridSpacing);
+        ospSetVec2f(volume, "voxelRange", osp::vec2f{0.0, 255.0f});
+        ospSet1f(volume, "samplingRate", VOLUME_SAMPLINGRATE_INIT);
+        ospSetObject(volume, "transferFunction", tf1d.tf);
+        ospCommit(volume);
+    }
+
 private:
     osp::vec3i dims;
     osp::vec3i space;
