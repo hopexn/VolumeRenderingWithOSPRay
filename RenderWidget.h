@@ -55,22 +55,6 @@ public:
         repaint();
     }
 
-    void setup() {
-        ospRelease(world);
-        world = ospNewModel();
-        ospAddVolume(world, volume.volume);
-        ospCommit(world);
-
-        //设置Renderer
-        ospSetObject(renderer, "model", world);
-        ospSetObject(renderer, "camera", camera.camera);
-        ospCommit(renderer);
-
-        ospRelease(framebuffer);
-        framebuffer = ospNewFrameBuffer(osp::vec2i{this->width(), this->height()}, OSP_FB_SRGBA,
-                                        OSP_FB_COLOR | OSP_FB_ACCUM);
-        ospCommit(framebuffer);
-    }
 
     void setNearClip(float nearClip) {
         camera.setNearClip(nearClip);
@@ -163,6 +147,49 @@ private:
     std::string filename;
     QPoint last_pos;
     bool update_flag = false;
+    std::vector<OSPLight> lights;
+    float ambient_light_intensity, distance_light_intensity;
+
+    void lights_setup() {
+        lights.clear();
+
+        OSPLight ambient_light = ospNewLight(renderer, "ambient");
+        ospSetf(ambient_light, "intensity", ambient_light_intensity);
+        ospCommit(ambient_light);
+
+        OSPLight distance_light = ospNewLight(renderer, "distant");
+        ospSetf(distance_light, "intensity", distance_light_intensity);
+        ospCommit(distance_light);
+
+        lights.push_back(ambient_light);
+        lights.push_back(distance_light);
+
+        OSPData lights_data = ospNewData(lights.size(), OSP_LIGHT, lights.data(), 0);
+        ospCommit(lights_data);
+
+        ospSetObject(renderer, "lights", lights_data);
+    }
+
+    void setup() {
+        ospRelease(world);
+        world = ospNewModel();
+        ospAddVolume(world, volume.volume);
+        ospCommit(world);
+
+        lights_setup();
+
+        //设置Renderer
+        ospSetObject(renderer, "model", world);
+        ospSetObject(renderer, "camera", camera.camera);
+        ospCommit(renderer);
+
+        ospRelease(framebuffer);
+        framebuffer = ospNewFrameBuffer(osp::vec2i{this->width(), this->height()}, OSP_FB_SRGBA,
+                                        OSP_FB_COLOR | OSP_FB_ACCUM);
+        ospCommit(framebuffer);
+
+
+    }
 };
 
 #endif //RENDERWIDGET_H

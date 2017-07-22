@@ -32,8 +32,8 @@ public:
         samplingRateLabel->setFixedHeight(20);
         samplingRateSpinBox = new QDoubleSpinBox;
         samplingRateSlider = new QSlider(Qt::Horizontal);
-        samplingRateSpinBox->setRange(0, RENDER_MAX_SAMPLING_RATE);
-        samplingRateSlider->setRange(0, (int) (RENDER_MAX_SAMPLING_RATE * 100));
+        samplingRateSpinBox->setRange(0, RENDER_SAMPLING_RATE_MAX);
+        samplingRateSlider->setRange(0, (int) (RENDER_SAMPLING_RATE_MAX * 100));
         samplingRateSpinBox->setValue(VOLUME_SAMPLINGRATE_INIT);
         samplingRateSlider->setValue((int) (VOLUME_SAMPLINGRATE_INIT * 100));
         connect(samplingRateSpinBox, SIGNAL(valueChanged(double)), this, SLOT(samplingRateChanged(double)));
@@ -42,8 +42,8 @@ public:
         clippingLabel = new QLabel("Near clipping:");
         clippingSpinBox = new QDoubleSpinBox;
         clippingSlider = new QSlider(Qt::Horizontal);
-        clippingSpinBox->setRange(0, RENDER_MAX_NEAR_CLIPPING);
-        clippingSlider->setRange(0, (int) (RENDER_MAX_NEAR_CLIPPING * 100));
+        clippingSpinBox->setRange(0, RENDER_NEAR_CLIPPING_MAX);
+        clippingSlider->setRange(0, (int) (RENDER_NEAR_CLIPPING_MAX * 100));
         clippingSpinBox->setValue(RENDER_CLIPPING_INIT);
         clippingSlider->setValue((int) (RENDER_CLIPPING_INIT * 100));
         connect(clippingSpinBox, SIGNAL(valueChanged(double)), this, SLOT(nearClipChanged(double)));
@@ -53,8 +53,8 @@ public:
         //RED
         specularSpinBoxRed = new QDoubleSpinBox;
         specularSliderRed = new QSlider(Qt::Horizontal);
-        specularSpinBoxRed->setRange(0, RENDER_MAX_SPECULAR_RATE);
-        specularSliderRed->setRange(0, (int) (RENDER_MAX_SPECULAR_RATE * 100));
+        specularSpinBoxRed->setRange(0, RENDER_SPECULAR_RATE_MAX);
+        specularSliderRed->setRange(0, (int) (RENDER_SPECULAR_RATE_MAX * 100));
         specularSpinBoxRed->setValue(RENDER_SPECULAR_RATE_INIT);
         specularSliderRed->setValue((int) (RENDER_SPECULAR_RATE_INIT * 100));
         connect(specularSpinBoxRed, SIGNAL(valueChanged(double)),
@@ -64,8 +64,8 @@ public:
         //GREEN
         specularSpinBoxGreen = new QDoubleSpinBox;
         specularSliderGreen = new QSlider(Qt::Horizontal);
-        specularSpinBoxGreen->setRange(0, RENDER_MAX_SPECULAR_RATE);
-        specularSliderGreen->setRange(0, (int) (RENDER_MAX_SPECULAR_RATE * 100));
+        specularSpinBoxGreen->setRange(0, RENDER_SPECULAR_RATE_MAX);
+        specularSliderGreen->setRange(0, (int) (RENDER_SPECULAR_RATE_MAX * 100));
         specularSpinBoxGreen->setValue(RENDER_SPECULAR_RATE_INIT);
         specularSliderGreen->setValue((int) (RENDER_SPECULAR_RATE_INIT * 100));
         connect(specularSpinBoxGreen, SIGNAL(valueChanged(double)),
@@ -75,8 +75,8 @@ public:
         //BLUE
         specularSpinBoxBlue = new QDoubleSpinBox;
         specularSliderBlue = new QSlider(Qt::Horizontal);
-        specularSpinBoxBlue->setRange(0, RENDER_MAX_SPECULAR_RATE);
-        specularSliderBlue->setRange(0, (int) (RENDER_MAX_SPECULAR_RATE * 100));
+        specularSpinBoxBlue->setRange(0, RENDER_SPECULAR_RATE_MAX);
+        specularSliderBlue->setRange(0, (int) (RENDER_SPECULAR_RATE_MAX * 100));
         specularSpinBoxBlue->setValue(RENDER_SPECULAR_RATE_INIT);
         specularSliderBlue->setValue((int) (RENDER_SPECULAR_RATE_INIT * 100));
         connect(specularSpinBoxBlue, SIGNAL(valueChanged(double)),
