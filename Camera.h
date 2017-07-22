@@ -16,15 +16,7 @@ public:
 
     ~MyCamera();
 
-    void update();
-
     OSPCamera camera = NULL;
-
-    //摄像头的位置、朝向
-    Vector3f pos, dir, up, center;
-
-    //近端截取
-    float nearClipping;
 
     void rotate(float dx, float dy) {
         float theta = 3.14f * (std::fabs(dx) + std::fabs(dy));
@@ -44,7 +36,7 @@ public:
         std::cout << "dir" << dir << std::endl;
         std::cout << "up" << up << std::endl;
 #endif
-        update();
+        setup();
     }
 
     void scale(float s) {
@@ -55,7 +47,7 @@ public:
         std::cout << "dir" << dir << std::endl;
         std::cout << "up" << up << std::endl;
 #endif
-        update();
+        setup();
     }
 
     void translate(float dx, float dy) {
@@ -69,7 +61,35 @@ public:
         std::cout << "dir" << dir << std::endl;
         std::cout << "up" << up << std::endl;
 #endif
-        update();
+        setup();
+    }
+
+    void setCameraPos(Vector3f pos, Vector3f dir, Vector3f up) {
+        this->pos = pos;
+        this->dir = dir;
+        this->up = up;
+        this->center = Vector3f(0, 0, 0);
+        setup();
+    }
+
+    void setNearClip(float nearClip) {
+        this->nearClip = nearClip;
+        setup();
+    }
+
+private:
+    //摄像头的位置、朝向
+    Vector3f pos, dir, up, center;
+
+    //近端截取
+    float nearClip;
+
+    void setup() {
+        ospSetVec3f(camera, "pos", osp_vec(pos));
+        ospSetVec3f(camera, "dir", osp_vec(dir));
+        ospSetVec3f(camera, "up", osp_vec(up));
+        ospSet1f(camera, "nearClip", nearClip);
+        ospCommit(camera);
     }
 
     osp::vec3f osp_vec(Vector3f vec) {

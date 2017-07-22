@@ -9,17 +9,11 @@ MyCamera::MyCamera() {
     //透视模式
     camera = ospNewCamera("perspective");
 
-    this->update();
+    this->setup();
 }
 
 MyCamera::~MyCamera() {
     ospRelease(camera);
 }
 
-void MyCamera::update() {
-    ospSetVec3f(camera, "pos", osp_vec(pos));
-    ospSetVec3f(camera, "dir", osp_vec(dir));
-    ospSetVec3f(camera, "up", osp_vec(up));
-    ospCommit(camera);
-}
 

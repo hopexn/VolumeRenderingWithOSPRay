@@ -45,11 +45,7 @@ public:
     }
 
     void setCameraPos(Vector3f pos, Vector3f dir, Vector3f up) {
-        camera.pos = pos;
-        camera.dir = dir;
-        camera.up = up;
-        camera.center = Vector3f(0, 0, 0);
-        camera.update();
+        camera.setCameraPos(pos, dir, up);
         setup();
         repaint();
     }
@@ -75,6 +71,12 @@ public:
         framebuffer = ospNewFrameBuffer(osp::vec2i{this->width(), this->height()}, OSP_FB_SRGBA,
                                         OSP_FB_COLOR | OSP_FB_ACCUM);
         ospCommit(framebuffer);
+    }
+
+    void setNearClip(float nearClip) {
+        camera.setNearClip(nearClip);
+        setup();
+        repaint();
     }
 
 protected:
@@ -145,6 +147,8 @@ protected:
     void clearUpdateFlag() {
         update_flag = false;
     }
+
+
 
 private:
     MyCamera camera;

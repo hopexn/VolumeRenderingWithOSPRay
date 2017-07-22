@@ -39,9 +39,23 @@ public:
         connect(samplingRateSpinBox, SIGNAL(valueChanged(double)), this, SLOT(samplingRateChanged(double)));
         connect(samplingRateSlider, SIGNAL(valueChanged(int)), this, SLOT(samplingRateChanged(int)));
 
+        clippingLabel = new QLabel("Near clipping:");
+        clippingSpinBox = new QDoubleSpinBox;
+        clippingSlider = new QSlider(Qt::Horizontal);
+        clippingSpinBox->setRange(0, RENDER_MAX_NEAR_CLIPPING);
+        clippingSlider->setRange(0, (int) (RENDER_MAX_NEAR_CLIPPING * 100));
+        clippingSpinBox->setValue(RENDER_CLIPPING_INIT);
+        clippingSlider->setValue((int) (RENDER_CLIPPING_INIT * 100));
+        connect(clippingSpinBox, SIGNAL(valueChanged(double)), this, SLOT(nearClipChanged(double)));
+        connect(clippingSlider, SIGNAL(valueChanged(int)), this, SLOT(nearClipChanged(int)));
+
         rightLayout->addWidget(samplingRateLabel, 0, 0, 1, 2);
         rightLayout->addWidget(samplingRateSpinBox, 1, 0, 1, 1);
         rightLayout->addWidget(samplingRateSlider, 1, 1, 1, 1);
+
+        rightLayout->addWidget(clippingLabel, 3, 0, 1, 2);
+        rightLayout->addWidget(clippingSpinBox, 4, 0, 1, 1);
+        rightLayout->addWidget(clippingSlider, 4, 1, 1, 1);
 
         centralLayout->addWidget(render);
         centralLayout->addLayout(rightLayout, 10);
@@ -145,9 +159,15 @@ private:
     QHBoxLayout *centralLayout;
     QGridLayout *rightLayout;
 
+    //设置采样率
     QLabel *samplingRateLabel;
     QDoubleSpinBox *samplingRateSpinBox;
     QSlider *samplingRateSlider;
+
+    //设置截断距离
+    QLabel *clippingLabel;
+    QDoubleSpinBox *clippingSpinBox;
+    QSlider *clippingSlider;
 
     QString currVolumeFile;
     QString currTF1DFile;
@@ -213,6 +233,16 @@ private slots:
     void samplingRateChanged(double value) {
         samplingRateSlider->setValue((int) (value * 100));
         render->setSamplingRate((float) value);
+    }
+
+    void nearClipChanged(int value) {
+        clippingSpinBox->setValue((double) value / 100);
+        render->setNearClip((float) value / 100);
+    }
+
+    void nearClipChanged(double value) {
+        clippingSlider->setValue((int) (value * 100));
+        render->setNearClip((float) value);
     }
 };
 
