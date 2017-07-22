@@ -112,7 +112,6 @@ private slots:
     };
 
     void tf1d() {
-        render
     }
 
     void tf1d_shading() {
