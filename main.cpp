@@ -2,13 +2,14 @@
 #include <QApplication>
 #include "ospray/ospray.h"
 #include "RenderWidget.h"
+#include "MainWindow.h"
 
 int main(int argc, const char **argv) {
     ospInit(&argc, argv);
     QApplication app(argc, (char **) argv);
 
-    RenderWidget render;
+    MainWindow mainWindow;
 
-    render.show();
+    mainWindow.show();
     return app.exec();
 }

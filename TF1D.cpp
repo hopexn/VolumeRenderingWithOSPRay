@@ -107,8 +107,6 @@ void TF1D::setup() {
     ospCommit(colors_data);
     OSPData opacities_data = ospNewData((size_t) item_num, OSP_FLOAT, opacities_tmp.data());
     ospCommit(opacities_data);
-
-    ospRelease(tf);
     tf = ospNewTransferFunction("piecewise_linear");
     ospSetData(tf, "colors", colors_data);
     ospSetData(tf, "opacities", opacities_data);

@@ -31,7 +31,7 @@ set(QT_USE_QTOPENGL TRUE)
 #项目源代码
 set(HEAD_FILES RenderWidget.h Camera.h TF1D.h Volume.h util/Vector.h)
 
-set(SOURCE_FILES main.cpp TF1D.cpp Volume.cpp Camera.cpp RenderWidget.cpp MainWIndow.cpp MainWIndow.h)
+set(SOURCE_FILES main.cpp TF1D.cpp Volume.cpp Camera.cpp RenderWidget.cpp MainWindow.cpp MainWindow.h)
 
 add_executable(OSPRayProject ${SOURCE_FILES} ${HEAD_FILES})
 

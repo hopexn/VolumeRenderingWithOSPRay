@@ -29,6 +29,16 @@ public:
         ospRelease(renderer);
     }
 
+    void openVolumeFile(std::string filename) {
+        this->filename = filename;
+        loadVolume(filename);
+        this->update();
+    }
+
+    void loadTF1D() {
+
+    }
+
 protected:
     void loadVolume(std::string filename) {
         volume.loadFromVifoFile(filename);
@@ -51,7 +61,7 @@ protected:
 
     void paintEvent(QPaintEvent *event) override {
         time_t start, end;
-        if(update_flag){
+        if (update_flag) {
             ospFrameBufferClear(framebuffer, OSP_FB_COLOR | OSP_FB_ACCUM);
             clearUpdateFlag();
         }
