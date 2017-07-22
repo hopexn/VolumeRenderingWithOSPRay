@@ -77,6 +77,10 @@ public:
         setup();
     }
 
+    osp::vec3f getDir() {
+        return osp_vec(dir);
+    }
+
 private:
     //摄像头的位置、朝向
     Vector3f pos, dir, up, center;

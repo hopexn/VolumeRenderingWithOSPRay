@@ -84,6 +84,26 @@ public:
         connect(specularSliderBlue, SIGNAL(valueChanged(int)),
                 this, SLOT(specularRateBlueChanged(int)));
 
+        ambientLabel = new QLabel("Ambient light intensity:");
+        ambientSpinBox = new QDoubleSpinBox;
+        ambientSlider = new QSlider(Qt::Horizontal);
+        ambientSpinBox->setRange(0, LIGHT_AMBIENT_INTENSITY_MAX);
+        ambientSlider->setRange(0, (int) (LIGHT_AMBIENT_INTENSITY_MAX * 100));
+        ambientSpinBox->setValue(LIGHT_AMBIENT_INTENSITY_INIT);
+        ambientSlider->setValue((int) (LIGHT_AMBIENT_INTENSITY_INIT * 100));
+        connect(ambientSpinBox, SIGNAL(valueChanged(double)), this, SLOT(ambientLightChanged(double)));
+        connect(ambientSlider, SIGNAL(valueChanged(int)), this, SLOT(ambientLightChanged(int)));
+
+        distantLabel = new QLabel("Distant light intensity:");
+        distantSpinBox = new QDoubleSpinBox;
+        distantSlider = new QSlider(Qt::Horizontal);
+        distantSpinBox->setRange(0, LIGHT_DISTANT_INTENSITY_MAX);
+        distantSlider->setRange(0, (int) (LIGHT_DISTANT_INTENSITY_MAX * 100));
+        distantSpinBox->setValue(LIGHT_DISTANT_INTENSITY_INIT);
+        distantSlider->setValue((int) (LIGHT_DISTANT_INTENSITY_INIT * 100));
+        connect(distantSpinBox, SIGNAL(valueChanged(double)), this, SLOT(distantLightChanged(double)));
+        connect(distantSlider, SIGNAL(valueChanged(int)), this, SLOT(distantLightChanged(int)));
+
         rightLayout->addWidget(samplingRateLabel, 0, 0, 1, 2);
         rightLayout->addWidget(samplingRateSpinBox, 1, 0, 1, 1);
         rightLayout->addWidget(samplingRateSlider, 1, 1, 1, 1);
@@ -100,8 +120,16 @@ public:
         rightLayout->addWidget(specularSpinBoxBlue, 9, 0, 1, 1);
         rightLayout->addWidget(specularSliderBlue, 9, 1, 1, 1);
 
+        rightLayout->addWidget(ambientLabel, 11, 0, 1, 2);
+        rightLayout->addWidget(ambientSpinBox, 12, 0, 1, 1);
+        rightLayout->addWidget(ambientSlider, 12, 1, 1, 1);
+
+        rightLayout->addWidget(distantLabel, 14, 0, 1, 2);
+        rightLayout->addWidget(distantSpinBox, 15, 0, 1, 1);
+        rightLayout->addWidget(distantSlider, 15, 1, 1, 1);
+
         centralLayout->addWidget(render);
-        centralLayout->addLayout(rightLayout, 10);
+        centralLayout->addLayout(rightLayout);
     }
 
     virtual ~MainWindow() {
@@ -228,6 +256,13 @@ private:
     QDoubleSpinBox *specularSpinBoxBlue;
     QSlider *specularSliderBlue;
 
+    //设置背景光强度
+    QLabel *ambientLabel;
+    QDoubleSpinBox *ambientSpinBox;
+    QSlider *ambientSlider;
+    QLabel *distantLabel;
+    QDoubleSpinBox *distantSpinBox;
+    QSlider *distantSlider;
 
     QString currVolumeFile;
     QString currTF1DFile;
@@ -254,7 +289,7 @@ private slots:
     }
 
     void tf1d_shading() {
-
+        render->switchGradientShading();
     }
 
     void pos_x_view() {
@@ -333,6 +368,26 @@ private slots:
     void specularRateBlueChanged(double value) {
         specularSliderBlue->setValue((int) (value * 100));
         render->setSpecularRate((float) value, SPECULAR_COLOR_BLUE);
+    }
+
+    void ambientLightChanged(int value) {
+        ambientSpinBox->setValue((double) value / 100);
+        render->setAmbientLightIntensity((float) value / 100);
+    }
+
+    void ambientLightChanged(double value) {
+        ambientSlider->setValue((int) (value * 100));
+        render->setAmbientLightIntensity((float) value);
+    }
+
+    void distantLightChanged(int value) {
+        distantSpinBox->setValue((double) value / 100);
+        render->setDistantLightIntensity((float) value / 100);
+    }
+
+    void distantLightChanged(double value) {
+        distantSlider->setValue((int) (value * 100));
+        render->setDistantLightIntensity((float) value);
     }
 };
 

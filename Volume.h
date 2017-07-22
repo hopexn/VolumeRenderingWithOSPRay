@@ -44,6 +44,15 @@ public:
         setup();
     }
 
+    void switchGradientShading() {
+        if (gradientShadingEnabled == 0) {
+            gradientShadingEnabled = 1;
+        } else {
+            gradientShadingEnabled = 0;
+        }
+        setup();
+    }
+
 private:
     TF1D tf1d;
 
@@ -53,6 +62,8 @@ private:
 
     osp::vec3f gridSpacing;
     osp::vec3f gridOrigin;
+
+    int gradientShadingEnabled = 0;
 
     float samplingRate;
     osp::vec3f specularRate;
@@ -68,6 +79,7 @@ private:
         ospSet1f(volume, "samplingRate", samplingRate);
         ospSetVec3f(volume, "specular", specularRate);
         ospSetObject(volume, "transferFunction", tf1d.tf);
+        ospSet1i(volume, "gradientShadingEnabled", gradientShadingEnabled);
         ospCommit(volume);
     }
 };

@@ -21,6 +21,9 @@ public:
         setFixedWidth(RENDER_WIDGET_WIDTH);
         renderer = ospNewRenderer("scivis");
         world = ospNewModel();
+        ambient_light_intensity = LIGHT_AMBIENT_INTENSITY_INIT;
+        distant_light_intensity = LIGHT_DISTANT_INTENSITY_INIT;
+
 
         filename = "assets/volume/engine.vifo";
         loadVolume(filename);
@@ -64,6 +67,24 @@ public:
 
     void setSpecularRate(float specularRate, int color) {
         volume.setSpecularRate(specularRate, color);
+        setup();
+        repaint();
+    }
+
+    void setAmbientLightIntensity(float value) {
+        this->ambient_light_intensity = value;
+        setup();
+        repaint();
+    }
+
+    void setDistantLightIntensity(float value) {
+        this->distant_light_intensity = value;
+        setup();
+        repaint();
+    }
+
+    void switchGradientShading() {
+        volume.switchGradientShading();
         setup();
         repaint();
     }
@@ -147,24 +168,23 @@ private:
     std::string filename;
     QPoint last_pos;
     bool update_flag = false;
-    std::vector<OSPLight> lights;
-    float ambient_light_intensity, distance_light_intensity;
+    float ambient_light_intensity, distant_light_intensity;
 
     void lights_setup() {
-        lights.clear();
-
         OSPLight ambient_light = ospNewLight(renderer, "ambient");
         ospSetf(ambient_light, "intensity", ambient_light_intensity);
         ospCommit(ambient_light);
 
-        OSPLight distance_light = ospNewLight(renderer, "distant");
-        ospSetf(distance_light, "intensity", distance_light_intensity);
-        ospCommit(distance_light);
+        OSPLight distant_light = ospNewLight(renderer, "distant");
+        ospSetf(distant_light, "intensity", distant_light_intensity);
+        ospSetVec3f(distant_light, "direction", camera.getDir());
+        ospCommit(distant_light);
 
+        std::vector<OSPLight> lights;
         lights.push_back(ambient_light);
-        lights.push_back(distance_light);
+        lights.push_back(distant_light);
 
-        OSPData lights_data = ospNewData(lights.size(), OSP_LIGHT, lights.data(), 0);
+        OSPData lights_data = ospNewData(lights.size(), OSP_LIGHT, lights.data());
         ospCommit(lights_data);
 
         ospSetObject(renderer, "lights", lights_data);
